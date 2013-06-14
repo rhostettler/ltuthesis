@@ -1,0 +1,191 @@
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ltuthesis.cls Example
+%% =============================================================================
+%% This is an example LaTeX file that shows how the 'ltuthesis.cls' file is 
+%% used. Most of the code should be self-explanatory. There are a couple of
+%% known issues in the template, have a look at the top of the class file and/or
+%% the TODO items in this document.
+%% 
+%% 2012-05-10 / Roland Hostettler <rolhos@ltu.se>
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[twoside,openright,12pt,a4paper]{ltuthesis}[2011/12/14]
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TODO (some global issues):
+%%  * In my lic, i used a shell script to relabel the included papers so that no
+%%    label conflicts occured. The proper solution of this would be to redefine
+%%    the \label{}, \ref{}, and \eqref{} commands in order to let this happen 
+%%    automagically. I'm thinking about something along the lines to store the
+%%    original commands using \let and then redefining the commands where we
+%%    simply prepend something like the paper identifier (A, B, C, ...). Some 
+%%    effort has been done already, check the cls file.
+%%  * A thorough explanation of the template should be created
+%%  * Maybe we should bundle our efforts with Johan C?
+%%  * Adjust copyright statement for not accepted papers
+%%  * Move the template to github
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Preamble - Include and Setup Packages
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Input encoding: Most modern OSes use UTF-8 and the template is written in
+%% UTF-8, however, others should work too
+\usepackage[utf8]{inputenc}
+
+%% Hyperref: Practical if you want a PDF with links and an index (but not
+%% required). Note that the library will unfortunately remove that when they
+%% add the cover pages
+\usepackage[plainpages=false,pdfpagelabels]{hyperref}
+\hypersetup{
+%    bookmarks=true,         		% show bookmarks bar?
+    unicode=false,          		% non-Latin characters bookmarks
+    pdftoolbar=true,        		% show Acrobat's toolbar?
+    pdfmenubar=true,        		% show Acrobat's menu?
+    pdffitwindow=false,     		% window fit to page when opened
+    pdfstartview={FitH},    		% fits the width of the page to the window
+    pdftitle={Vehicle Parameter Estimation using Road Surface Vibrations},					    % title
+    pdfauthor={Roland Hostettler},	% author
+    pdfsubject={},   				% subject of the document
+    pdfcreator={pdfTeX},			% creator of the document
+    pdfproducer={}, 				% producer of the document
+    pdfkeywords={},					% list of keywords
+    pdfnewwindow=true,  			% links in new window
+    colorlinks=true,				% false: boxed links; true: colored links
+    linkcolor=black,    			% color of internal links
+    citecolor=black,    			% color of links to bibliography
+    filecolor=black,    			% color of file links
+    urlcolor=black,      			% color of external links
+}
+
+%% If you have appendices in one (or more) of your articles, you need the
+%% following lines
+%% TODO: See how we can properly integrate this in the template
+\usepackage{appendix}
+\renewcommand{\setthesection}{\Alph{section}}
+\renewcommand*{\theHchapter}{\thepart.\thechapter}
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Start the document
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Setup the Bibliography
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The bibliography is handled by bibunits which creates individual 
+%% bibliography units for the "Kappa"-part and one for each of the papers. The
+%% bibunits are created automatically and the bibliography for the kappa is 
+%% added automatically too. However, in the papers you have to issue a '\putbib'
+%% command at the place where you want the bibliography to appear.
+%%
+%% '\defaultbibliograph' and '\defaultbibliographystyle' define the default
+%% bibliography file and style used for the entire document if no other
+%% bibliography and/or style is specified within the respective bibunit.
+%%
+%% Finally, bibunits creates a set of bibliography files called 'buX.aux', one 
+%% for each bibunit. You have to run bibtex on each of them to genereate the
+%% corresponding bbl-file. On Linux I use the following script (which is
+%% involved as a post-processor after pdflatex in my editor:
+%%
+%%     # !/bin/bash
+%%    for file in bu*.aux; do
+%%        bibtex $file
+%%    done;
+%%
+%% Details about all this can be found in the bibunits manual.
+\defaultbibliography{dummy}
+\defaultbibliographystyle{IEEEtran}
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Front Matter
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This part should be pretty self-explanatory...
+\title{Alternative CSEE Thesis Template}
+\author{Roland Hostettler}
+\address{Department of Computer Science, Electrical and Space Engineering\\
+	Luleå University of Technology\\
+	Luleå, Sweden}
+\supervisors{Your Supervisor}
+\maketitle
+
+%% Dedication, optional
+\begin{dedication}
+	Your dedication
+\end{dedication}
+
+%% Abstract
+\begin{abstract}
+Your thesis abstract.
+\end{abstract}
+
+%% Table of Contents
+\tableofcontents
+
+%% Acknowledgments, optional
+\begin{acknowledgments}
+Your thesis acknowledgments.
+\end{acknowledgments}
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Kappa
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The 'kappa' part of the thesis is put into the 'intro' environment. This
+%% environment makes sure that all the formatting, etc. is setup correctly.
+%% After that it's just a matter of including the different chapters.
+\begin{intro}
+\input{Kappa/introduction}
+\input{Kappa/usage}
+\end{intro}
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Papers
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Similarly to the 'intro'-environment, the 'papers'-environment sets up the
+%% whole paper part with all the necessary formatting, etc.
+\begin{papers}
+
+%% Papers are included using the '\includepaper'-command. It uses the key-value
+%% options format similar to many other LaTeX commands (e.g. \includegraphics).
+%% The keys are:
+%% 
+%%     * title        The paper title
+%%     * author       The paper author(s), use curly brackets for a comma-
+%%                    separated list of authors
+%%     * journal      The journal where the article was published
+%%     * conference   The conference where the article was published
+%%     * copyright    The copyright holder
+%%     * published    For a published paper
+%%     * accepted     For an accepted paper
+%%     * submitted    For a submitted paper
+%%
+%% The main argument to the \includepaper-command is then the paper's main
+%% file. This is supposed to be very slim, see Example/PaperA/main.tex or
+%% Example/PaperB/main.tex. All the titles, etc. are typeset automatically.
+
+%% Paper A: First Example Paper
+\includepaper[title=An Example Paper,
+	author={Author A and Author B},
+	journal=A Journal of Important Studies,
+	copyright={2012, The Institution of Important Studies},
+	published]{PaperA/main}
+
+%% Paper B: Second Example Paper
+\includepaper[title=Another Example Paper,
+	author={Author A, Author B, and Author C},
+	conference={1st Conference on \LaTeX~Templates},
+	copyright={2012, International \LaTeX~Federation},
+	published]{PaperB/main}
+
+\end{papers}
+\end{document}
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% EOF
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
