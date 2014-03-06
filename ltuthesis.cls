@@ -32,7 +32,13 @@
 \RequirePackage{keyval}
 \RequirePackage[sectionbib]{bibunits}
 
-\RequirePackage{avant}
+% Fonts
+%\RequirePackage{avant}
+%\RequirePackage{tgheros}   % <- Closest to Helvetica neue (i suppose)
+\RequirePackage{tgadventor}
+\RequirePackage{tgpagella} % <- Closest "standard" LaTeX font to Bembo
+\RequirePackage[T1]{fontenc}
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% General Formatting
@@ -223,6 +229,7 @@ Snowland, North Pole}
 	\pagenumbering{Roman} % use capital roman page numbering (I, II, etc.)
 	\cfspecial             % switch to special title formatting
 %	\tableofcontents       % make the toc
+	\pdfbookmark{\contentsname}{toc}
 	\oldtoc
 	\cfregular             % switch back to regular title formatting style
 	\cleardoublepage       % advance to a new page
@@ -294,20 +301,6 @@ Snowland, North Pole}
 			\end{minipage}
 		\end{center}
 	}
-
-	%%%% /!\ experimental
-	% redefine the label and ref commands
-%	\let\rlabel\label
-%	\renewcommand{\label}[1]{\rlabel{\thechapter:##1}}
-
-%	\let\rsublabel\subfloat@label
-%	\renewcommand{\subfloat@label}[1]{\rsublabel{\thechapter:##1}}
-
-%	\let\rref\ref
-%	\renewcommand{\ref}[1]{\rref{\thechapter:##1}}
-
-%	\let\rsubref\subref
-%	\renewcommand{\subref}[1]{\rsubref{\thechapter:##1}}
 }
 
 %% The 'papers' environment, wrapping all of the above. Starts a new part 
