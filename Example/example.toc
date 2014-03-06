@@ -1,8 +1,0 @@
-\contentsline {part}{I\hspace {1em}}{1}{part.1}
-\contentsline {chapter}{References}{3}{section*.4}
-\contentsline {part}{II\hspace {1em}}{3}{part.2}
-\ttl@change@i {\@ne }{chapter}{0pt}{\addvspace {12pt}}{\bfseries }{}{\bfseries \hfill \contentspage }\relax 
-\ttl@change@v {chapter}{}{}{}\relax 
-\contentsline {chapter}{\numberline {A}Paper A}{5}{chapter.II.A}
-\contentsline {chapter}{\numberline {B}Paper B}{9}{chapter.II.B}
-\contentsfinish 
