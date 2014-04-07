@@ -247,11 +247,14 @@ Snowland, North Pole}
 	\part{}
 	\begin{bibunit}
 }{
+	\cleardoublepage
 	\let\thebibliography\stdthebibliography
 	\cfspecial
 	\renewcommand{\bibname}{References}
-	\putbib
+	\phantomsection
 	\addcontentsline{toc}{chapter}{References}
+	\putbib
+%	\addcontentsline{toc}{chapter}{References}
 	\cfregular
 	\end{bibunit}
 }
@@ -275,10 +278,9 @@ Snowland, North Pole}
 	%\titlecontents{section}[left]{above}{before w/ label}{before w/o label}{filler and page}[after]
 	\titlecontents{chapter}[0pt]{\addvspace{12pt}}{\bfseries}{}{\bfseries\hfill\contentspage}
 
-
 	% Reformat headers
 	\renewcommand{\chaptermark}[1]{\markboth{\chaptertitlename\ \Alph{chapter}}{}}
-%	\renewcommand{\sectionmark}[1]{\markright{\arabic{section}.\; ##1}}
+%	\renewcommand{\sectionmark}[1]{\markright{\thesection\  ##1}}
 
 	% Reformat caption labels
 	\renewcommand{\thefigure}{\arabic{figure}}
