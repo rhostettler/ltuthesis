@@ -19,14 +19,14 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 \ProcessOptions
 
-
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Classes and Packages
+%% General Classes and Packages
+%% ============================
+%% Note: More packages are loaded further down when they're needed
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \LoadClass{book}
 \RequirePackage[includehead,includefoot,top=20mm,left=20mm,right=20mm,bottom=20mm,a4paper]{geometry}
 \RequirePackage{fancyhdr}		% fancy headers
-\RequirePackage{titlesec}		% title formatting
 \RequirePackage{titletoc}		% ToC formatting
 \RequirePackage{amsmath}		% advanced mathematics
 \RequirePackage{keyval}
@@ -49,33 +49,52 @@
 %\clubpenalty10000
 %\widowpenalty10000
 
-%% Reset chapter numbers when starting a new part
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title Formatting
+%% ================
+%%
+%% We use the 'titlesec' package for this. The advanced interface using
+%% '\titleformat' is:
+%% 
+%% \titleformat{command}[shape]{format}{label}{sep}{before}[after]
+%%   * command   Self-explanatory
+%%   * shape     Paragraph shape
+%%   * format    Format to be applied to the whole title including label and
+%%               text. This part can contain vertical material which is typeset
+%%               just after the space above the title
+%%   * label     Defines the label, leave empty for no label.
+%%   * sep       Horizontal separation between label and title body (a length,
+%%               must not be empty).
+%%   * before    Code preceding the title body.
+%%   * after     Code following the title body.
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Load the package
+\RequirePackage{titlesec}
+
+% Part
+\titleformat{\part}[display]{\sffamily\raggedleft \Huge}{\partname\ \thepart}{0pt}{}
+
+% Regular chapter formatting
+% => "Chapter X" is inside the "bars"
+\titleformat{name=\chapter}[display]{\sffamily\raggedleft\hrule\vspace{5pt}\Huge}{\scshape \chaptertitlename\ \thechapter \hrule}{10pt}{}
+
+% Starred chapter formatting
+% => Chapter name is inside the "bars" (Abstract, Contents, References, etc.) 
+\titleformat{name=\chapter,numberless}[hang]{\sffamily\raggedleft\hrule\vspace{5pt}\Huge\scshape}{}{0pt}{}[\hrule]
+
+% Extra: Reset chapter numbers when starting a new part
 \@addtoreset{chapter}{part}
 
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Titles Formatting
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Reformat the chapter headings
-% \titleformat{command}[shape]{format}{label}{sep}{before}[after]
-\titleformat{\part}[display]{\sffamily\raggedleft \Huge}{\partname\ \thepart}{0pt}{}
-%\titleformat{\section}[hang]{\sffamily\bfseries\Large}{\thesection\ }{0pt}{\Large}
+% Section
 \titleformat{\section}[hang]{\sffamily\Large}{\thesection\ }{0pt}{\Large}
-%\titleformat{\subsection}[hang]{\sffamily\bfseries\large}{\thesubsection\ }{0pt}{\large}
+
+% Subsection
 \titleformat{\subsection}[hang]{\sffamily\large}{\thesubsection\ }{0pt}{\large}
-%\titleformat{\subsubsection}[hang]{\sffamily\bfseries}{}{0pt}{\sffamily\bfseries}
+
+% Subsubsection
 \titleformat{\subsubsection}[hang]{\sffamily}{}{0pt}{\sffamily}
-
-%% Title formatting for where the "chaptername" is inside the bars (Abstrct, etc.)
-\newcommand{\cfspecial}[0]{
-	\titleformat{\chapter}[display]{\sffamily\raggedleft\setlength{\parskip}{5pt}\Huge\hrule}{}{10pt}{\scshape\huge}[\hrule]
-}
-
-%% Regular title formatting where "Chapter X" is inside the bars
-\newcommand{\cfregular}[0]{
-	\titleformat{\chapter}[display]{\sffamily\raggedleft \setlength{\parskip}{5pt} \Huge \hrule}{\scshape \chaptertitlename\ \thechapter \hrule}{10pt}{\sffamily\huge}
-}
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -177,10 +196,8 @@ Snowland, North Pole}
 %% Abstract
 \newenvironment{abstract}{
 	\pagenumbering{Roman}  % use capital roman page numbering (I, II, etc.)
-	\cfspecial             % use special title format for chapters
 	\chapter*{Abstract}    % add the abstract title
 }{
-	\cfregular             % switch back to regular title formatting
 	\cleardoublepage       % empty pages
 	\pagenumbering{arabic} % set the page numbering to arabic (1, 2, ...)
 }
@@ -188,10 +205,8 @@ Snowland, North Pole}
 %% Acknowledgments
 \newenvironment{acknowledgments}{
 	\pagenumbering{Roman}      % use capital roman page numbering (I, II, etc.)
-	\cfspecial                 % use special title format for chapters
 	\chapter*{Acknowledgments} % add the acknowledgments title
 }{
-	\cfregular                 % switch back to regular title formatting
 	\cleardoublepage           % empty pages
 	\pagenumbering{arabic}     % set the page numbering to arabic (1, 2, ...)
 }
@@ -228,11 +243,8 @@ Snowland, North Pole}
 \setcounter{tocdepth}{1}
 \renewcommand{\tableofcontents}[0]{
 	\pagenumbering{Roman} % use capital roman page numbering (I, II, etc.)
-	\cfspecial             % switch to special title formatting
-%	\tableofcontents       % make the toc
 	\pdfbookmark{\contentsname}{toc}
 	\oldtoc
-	\cfregular             % switch back to regular title formatting style
 	\cleardoublepage       % advance to a new page
 	\pagenumbering{arabic} % set the page numbering to arabic (1, 2, ...)
 }
@@ -249,17 +261,10 @@ Snowland, North Pole}
 	\begin{bibunit}
 }{
 	\cleardoublepage
-	
-	% Switch to special chapter formatting where the chapter title is 'inside 
-	% bars'
-	\cfspecial
 	\renewcommand{\bibname}{References}
 	\phantomsection
 	\addcontentsline{toc}{chapter}{References}
 	\putbib
-	
-	% Restore commands and formatting
-	\cfregular
 	\end{bibunit}
 }
 
