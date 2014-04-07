@@ -30,7 +30,8 @@
 \RequirePackage{titletoc}		% ToC formatting
 \RequirePackage{amsmath}		% advanced mathematics
 \RequirePackage{keyval}
-\RequirePackage[sectionbib]{bibunits}
+%\RequirePackage[sectionbib]{bibunits}
+\RequirePackage{bibunits}
 
 % Fonts
 %\RequirePackage{avant}
@@ -239,22 +240,25 @@ Snowland, North Pole}
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Kappa
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%% =====
 %% The 'intro'-environment. Starts a new part (Part I) and creates a global list 
 %% of references at the end of the part.
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newenvironment{intro}{
 	\part{}
 	\begin{bibunit}
 }{
 	\cleardoublepage
-	\let\thebibliography\stdthebibliography
+	
+	% Switch to special chapter formatting where the chapter title is 'inside 
+	% bars'
 	\cfspecial
 	\renewcommand{\bibname}{References}
 	\phantomsection
 	\addcontentsline{toc}{chapter}{References}
 	\putbib
-%	\addcontentsline{toc}{chapter}{References}
+	
+	% Restore commands and formatting
 	\cfregular
 	\end{bibunit}
 }
@@ -272,7 +276,14 @@ Snowland, North Pole}
 \newcommand{\paperssetup}[0]{
 	% Reformat titles
 	\renewcommand{\chaptername}{Paper}
+	
+	% Reformat bibliography
 	\renewcommand{\bibname}{References}
+	\let\stdthebibliography\thebibliography
+	\renewcommand{\thebibliography}{%
+		\let\chapter\section%
+		\stdthebibliography%
+	}
 
 	% Reformat ToC (Chapter entries only)
 	%\titlecontents{section}[left]{above}{before w/ label}{before w/o label}{filler and page}[after]
