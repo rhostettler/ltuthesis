@@ -1,29 +1,49 @@
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LaTeX document class: ltuthesis.cls
 %% 
-%% Current version: 1.0
-%% Last modified by: Roland Hostettler, December 14, 2012
+%% Current version: 1.1
+%% Last modified by: Roland Hostettler, April 8, 2014
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Identification & Options Handling
+%% Identification
+%% ==============
+%% 
+%% Class ID and LaTeX requirements
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% LaTeX requirement
+%% Require LaTeX 2e
 \NeedsTeXFormat{LaTeX2e}
 
-%% Class identification
+%% Class ID
 \ProvidesClass{ltuthesis}[2014/04/08 Roland's Lic/PhD thesis class]
 
-% Enable thumbmarks
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Class Options
+%% =============
+%% 
+%% ltuthesis has a few of its own class options affecting the layout. These are:
+%%
+%%   * thumbmarks If set, thumbmarks (small black bars) are printed on the right
+%%                edge of the paper overview page. The feature is disabled by
+%%                default
+%%
+%% All other options are directly passed to the base class (book).
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Thumbmarks
 \DeclareOption{thumbmarks}{%
 	\AtBeginDocument{%
 		\renewcommand{\thumbmark}{\fancytab{}{\value{chapter}}}
 	}
 }
 
-%% Forward all the unknown options to our parent & process them
+%% Forward all the unknown options to our parent (book)
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+
+%% Process all options
 \ProcessOptions
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,7 +54,6 @@
 \LoadClass{book}
 \RequirePackage[includehead,includefoot,top=20mm,left=20mm,right=20mm,bottom=20mm,a4paper]{geometry}
 \RequirePackage{fancyhdr}		% fancy headers
-\RequirePackage{titletoc}		% ToC formatting
 \RequirePackage{amsmath}		% advanced mathematics
 \RequirePackage{keyval}
 \RequirePackage{bibunits}
@@ -84,39 +103,62 @@
 %%   * after     Code following the title body.
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Load the package
+%% Load titlesec
 \RequirePackage{titlesec}
 
-% Part
+%% Part
 \titleformat{\part}[display]{\sffamily\raggedleft \Huge}{\partname\ \thepart}{0pt}{}
 
-% Regular chapter formatting
-% => "Chapter X" is inside the "bars"
+%% Regular chapter formatting
+%% => "Chapter X" is inside the "bars"
 \titleformat{name=\chapter}[display]{\sffamily\raggedleft\hrule\vspace{5pt}\Huge}{\scshape \chaptertitlename\ \thechapter \hrule}{10pt}{}
 
-% Starred chapter formatting
-% => Chapter name is inside the "bars" (Abstract, Contents, References, etc.) 
+%% Starred chapter formatting
+%% => Chapter name is inside the "bars" (Abstract, Contents, References, etc.) 
 \titleformat{name=\chapter,numberless}[hang]{\sffamily\raggedleft\hrule\vspace{5pt}\Huge\scshape}{}{0pt}{}[\hrule]
 
-% Extra: Reset chapter numbers when starting a new part
+%% Extra: Reset chapter numbers when starting a new part
 \@addtoreset{chapter}{part}
 
-% Section
+%% Section
 \titleformat{\section}[hang]{\sffamily\Large}{\thesection\ }{0pt}{\Large}
 
-% Subsection
+%% Subsection
 \titleformat{\subsection}[hang]{\sffamily\large}{\thesubsection\ }{0pt}{\large}
 
-% Subsubsection
+%% Subsubsection
 \titleformat{\subsubsection}[hang]{\sffamily}{}{0pt}{\sffamily}
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Table of Contents Formatting
+%% ============================
+%%
+%% Here, we format the table of contents (toc), using the titletoc package. In
+%% general, we don't want page numbers for 'Part I' and 'Part II'. Furthermore,
+%% adjustments to the toc formatting are made later on (in \papersetup) where we
+%% change the appearance of \chapter since it's used with a different purpose in
+%% the papers.
+%%
+%% The interface of \titlecontents is:
+%%
+%% \titlecontents{section}[left]{above}{before w/ label}{before w/o label}
+%% {filler and page}[after]
+%%   * section           The sectioning command (without leading backslash)
+%%   * left              Space to the left
+%%   * above             Space above
+%%   * before w/ label  
+%%   * before w/o label  
+%%   * filler and page   How to fill the space between the section name and
+%%                       number and page number formatting
+%%   * after             Additional content after the page number
+%%
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Global: Print "Part #", e.g. "Part I" instead of just "I"
-%\titlecontents{section}[left]{above}{before w/ label}{before w/o label}{filler and page}[after]
+%% Load titletoc
+\RequirePackage{titletoc}
+
+%% Print "Part #" instead of just "#"
 \titlecontents{part}[0pt]{\addvspace{26pt}}{}{\large \bfseries \partname\ \thepart}{}[]
 
 
@@ -233,13 +275,11 @@ Snowland, North Pole}
 		\thispagestyle{empty}
 		\begin{center}
 			\vspace*{1cm} \mbox{}\hrulefill \mbox{}\\[2.5cm] % Vertical line
-			{\sffamily\Huge \textbf{\thetitle\\[2.5cm]}}              % Title
-			{\sffamily\LARGE \textbf{\theauthor}}\\[2.25cm]           % Author
-			{\large \theaddress}\\[5.5cm]                   % Address
-%			{\large \theaddress}\\[2.25cm]                   % Address
-%			{\large \thedate}\\[2.25cm]                      % Date
-			{\large \mbox{}\hrulefill\mbox{}}\\[1cm]         % Vertical line
-			{\sffamily\large \textbf{Supervisors:}}\\[0.5cm]          % Supervisors line
+			{\sffamily\Huge \textbf{\thetitle\\[2.5cm]}}     % Thesis title
+			{\sffamily\LARGE \textbf{\theauthor}}\\[2.25cm]  % Author
+			{\large \theaddress}\\[5.5cm]                    % Address
+			{\large \mbox{}\hrulefill\mbox{}}\\[1cm]         % Horizontal line
+			{\sffamily\large \textbf{Supervisors:}}\\[0.5cm] % Supervisors line
 			{\large \thesupervisors}                         % Supervisors
 		\end{center}
 	\end{titlepage}	
@@ -322,7 +362,6 @@ Snowland, North Pole}
 	% Renew the abstract environment in order to use it in the articles
 	\renewenvironment{abstract}{
 		\begin{center}
-%			\begin{minipage}{0.9\textwidth}
 			\begin{minipage}{\textwidth}
 			\hrule
 			\vspace*{8pt}
@@ -411,7 +450,6 @@ Snowland, North Pole}
 	\cleardoublepage
 	\thispagestyle{plain}
 	\begin{center}
-%		\textbf{\LARGE \thepapertitle}\\[0.8cm]
 		{\sffamily \LARGE \thepapertitle}\\[0.8cm]
 		\thepaperauthor\\[1cm]
 	\end{center}
