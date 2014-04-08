@@ -13,7 +13,14 @@
 \NeedsTeXFormat{LaTeX2e}
 
 %% Class identification
-\ProvidesClass{ltuthesis}[2011/12/14 Roland's Lic/PhD thesis class]
+\ProvidesClass{ltuthesis}[2014/04/08 Roland's Lic/PhD thesis class]
+
+% Enable thumbmarks
+\DeclareOption{thumbmarks}{%
+	\AtBeginDocument{%
+		\renewcommand{\thumbmark}{\fancytab{}{\value{chapter}}}
+	}
+}
 
 %% Forward all the unknown options to our parent & process them
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
@@ -30,8 +37,15 @@
 \RequirePackage{titletoc}		% ToC formatting
 \RequirePackage{amsmath}		% advanced mathematics
 \RequirePackage{keyval}
-%\RequirePackage[sectionbib]{bibunits}
 \RequirePackage{bibunits}
+
+% Thumbmarks
+\RequirePackage{fancytabs}
+\fancytabsLeftColor{black}
+\fancytabsRightColor{black}
+%\fancytabsHeight{} % default: 4cm
+%\fancytabsWidth{} % default: 1cm
+\newcommand{\thumbmark}{}
 
 % Fonts
 %\RequirePackage{avant}
@@ -378,8 +392,11 @@ Snowland, North Pole}
 	\cleardoublepage
 	\chapter[Paper \Alph{chapter}]{\thepapertitle}
 	\label{paper:\Alph{chapter}}
+	\thumbmark 	% Add a thumbmark
 
+	% Include paper info
 	\vspace*{3cm}
+	\noindent
 	\textbf{Authors:}\\
 	\thepaperauthor\\
 	%
@@ -389,7 +406,7 @@ Snowland, North Pole}
 	%
 	\vspace*{0.6cm}\\
 	\copyright~\thepapercopyright, reprinted with permission.
-
+	
 	% Create the paper title
 	\cleardoublepage
 	\thispagestyle{plain}
