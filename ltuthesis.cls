@@ -36,7 +36,7 @@
 %% Thumbmarks
 \DeclareOption{thumbmarks}{%
 	\AtBeginDocument{%
-		\renewcommand{\thumbmark}{\fancytab{}{\value{chapter}}}
+		\renewcommand{\thumbmark}[4]{\addthumb{#1}{#2}{#3}{#4}}
 	}
 }
 
@@ -59,12 +59,8 @@
 \RequirePackage{bibunits}
 
 % Thumbmarks
-\RequirePackage{fancytabs}
-\fancytabsLeftColor{black}
-\fancytabsRightColor{black}
-%\fancytabsHeight{} % default: 4cm
-%\fancytabsWidth{} % default: 1cm
-\newcommand{\thumbmark}{}
+\RequirePackage[height=20mm,width=10mm,nophantomsection]{thumbs}
+\newcommand{\thumbmark}[4]{}
 
 % Fonts
 %\RequirePackage{avant}
@@ -240,36 +236,31 @@ Snowland, North Pole}
 
 %% Dedication
 \newenvironment{dedication}{
-	\pagenumbering{Roman}  % use capital roman page numbering (I, II, etc.)
 	\thispagestyle{plain}
 	\vspace*{10cm}
 	\raggedleft \itshape
 }{
 	\cleardoublepage       % empty pages
-	\pagenumbering{arabic} % set the page numbering to arabic (1, 2, ...)
 }
 
 %% Abstract
 \newenvironment{abstract}{
-	\pagenumbering{Roman}  % use capital roman page numbering (I, II, etc.)
 	\chapter*{Abstract}    % add the abstract title
 }{
 	\cleardoublepage       % empty pages
-	\pagenumbering{arabic} % set the page numbering to arabic (1, 2, ...)
 }
 
 %% Acknowledgments
 \newenvironment{acknowledgments}{
-	\pagenumbering{Roman}      % use capital roman page numbering (I, II, etc.)
 	\chapter*{Acknowledgments} % add the acknowledgments title
 }{
 	\cleardoublepage           % empty pages
-	\pagenumbering{arabic}     % set the page numbering to arabic (1, 2, ...)
 }
 
 %% Titlepage
 \renewcommand{\maketitle}{
-	\renewcommand{\thepage}{t1}
+	\pagenumbering{Roman}
+
 	% The title page
 	\begin{titlepage}
 		\thispagestyle{empty}
@@ -287,7 +278,6 @@ Snowland, North Pole}
 	% Blank page at the back of the title
 	\newpage
 	\thispagestyle{empty}
-	\renewcommand{\thepage}{t2}
 	\mbox{}
 	\newpage
 }
@@ -296,11 +286,9 @@ Snowland, North Pole}
 \let\oldtoc\tableofcontents
 \setcounter{tocdepth}{1}
 \renewcommand{\tableofcontents}[0]{
-	\pagenumbering{Roman} % use capital roman page numbering (I, II, etc.)
 	\pdfbookmark{\contentsname}{toc}
 	\oldtoc
 	\cleardoublepage       % advance to a new page
-	\pagenumbering{arabic} % set the page numbering to arabic (1, 2, ...)
 }
 
 
@@ -311,6 +299,7 @@ Snowland, North Pole}
 %% of references at the end of the part.
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newenvironment{intro}{
+	\pagenumbering{arabic}
 	\part{}
 	\begin{bibunit}
 }{
@@ -431,7 +420,9 @@ Snowland, North Pole}
 	\cleardoublepage
 	\chapter[Paper \Alph{chapter}]{\thepapertitle}
 	\label{paper:\Alph{chapter}}
-	\thumbmark 	% Add a thumbmark
+
+	% Add a thumbmark
+	\thumbmark{Paper \Alph{chapter}}{\hspace{1.25mm}\Large\sffamily\Alph{chapter}\hspace{1.25mm}}{white}{black}
 
 	% Include paper info
 	\vspace*{3cm}
@@ -465,6 +456,7 @@ Snowland, North Pole}
 	\end{bibunit}
 
 	% End of paper
+	\clearpage
 }
 
 
