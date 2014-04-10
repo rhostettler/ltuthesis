@@ -58,6 +58,8 @@
 \RequirePackage{keyval}
 \RequirePackage{bibunits}
 
+\RequirePackage{etoolbox}     % Provides patchmd (among others)
+
 % Thumbmarks
 \RequirePackage[height=20mm,width=10mm,nophantomsection]{thumbs}
 \newcommand{\thumbmark}[4]{}
@@ -295,6 +297,7 @@ Snowland, North Pole}
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Kappa
 %% =====
+%% 
 %% The 'intro'-environment. Starts a new part (Part I) and creates a global list 
 %% of references at the end of the part.
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -315,24 +318,31 @@ Snowland, North Pole}
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Papers
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Reformat header and footers
-%\renewcommand{\sectionmark}[1]{
-%	\markboth{\arabic{section}\ #1}{}
-%}
-
 %% Command to switch to papers mode -> reformats a great deal of stuff
 \newcommand{\paperssetup}[0]{
-	% Reformat titles
+	%% Papers are added as 'Chapters' with the title 'Paper'
 	\renewcommand{\chaptername}{Paper}
 	
-	% Reformat bibliography
+	%% Reformat bibliography
+	% 1. Set title to 'References'
 	\renewcommand{\bibname}{References}
-	\let\stdthebibliography\thebibliography
-	\renewcommand{\thebibliography}{%
-		\let\chapter\section%
-		\stdthebibliography%
-	}
+	
+	% 2. We want it to appear at the section-level, not chapter
+	\patchcmd{\thebibliography}{\chapter*}{\section*}{}{}
 
+	% 3. We want to keep 'Paper X' in the header on even pages (so that 
+	%    appendices don't appear under the 'References' header).
+	\newcommand{\mymkboth}[2]{\@mkboth{\chaptertitlename\ \Alph{chapter}}{##2}}{}
+	\patchcmd{\thebibliography}{\@mkboth}{\mymkboth}{}{}
+	
+	% 4. Make the bibliography appear in the ToC
+%	\let\stdputbib\putbib
+%	\renewcommand{\putbib}{%
+%		\phantomsection
+%		\addcontentsline{toc}{section}{\numberline{}References}
+%		\stdputbib
+%	}
+	
 	% Reformat ToC (Chapter entries only)
 	%\titlecontents{section}[left]{above}{before w/ label}{before w/o label}{filler and page}[after]
 	\titlecontents{chapter}[0pt]{\addvspace{12pt}}{\bfseries}{}{\bfseries\hfill\contentspage}
