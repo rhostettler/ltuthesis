@@ -115,7 +115,7 @@
 %% => Chapter name is inside the "bars" (Abstract, Contents, References, etc.) 
 \titleformat{name=\chapter,numberless}[hang]{\sffamily\raggedleft\hrule\vspace{5pt}\Huge\scshape}{}{0pt}{}[\hrule]
 
-%% Extra: Reset chapter numbers when starting a new part
+%% Reset chapter numbers when starting a new part
 \@addtoreset{chapter}{part}
 
 %% Section
@@ -126,6 +126,12 @@
 
 %% Subsubsection
 \titleformat{\subsubsection}[hang]{\sffamily}{}{0pt}{\sffamily}
+
+%% Class for paper titles above abstract
+\titleclass{\paperhead}{top}[\chapter]
+\newcounter{paperhead}
+\titleformat{\paperhead}[hang]{\centering\sffamily\LARGE}{}{0pt}{}
+\titlespacing{\paperhead}{0pt}{0pt}{0.4cm}
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -268,11 +274,14 @@ Snowland, North Pole}
 		\thispagestyle{empty}
 		\begin{center}
 			\vspace*{1cm} \mbox{}\hrulefill \mbox{}\\[2.5cm] % Vertical line
-			{\sffamily\Huge \textbf{\thetitle\\[2.5cm]}}     % Thesis title
-			{\sffamily\LARGE \textbf{\theauthor}}\\[2.25cm]  % Author
+%			{\sffamily\Huge \textbf{\thetitle\\[2.5cm]}}     % Thesis title
+%			{\sffamily\LARGE \textbf{\theauthor}}\\[2.25cm]  % Author
+			{\sffamily\Huge \thetitle\\[2.5cm]}     % Thesis title
+			{\sffamily\LARGE \theauthor}\\[2.25cm]  % Author
 			{\large \theaddress}\\[5.5cm]                    % Address
 			{\large \mbox{}\hrulefill\mbox{}}\\[1cm]         % Horizontal line
-			{\sffamily\large \textbf{Supervisors:}}\\[0.5cm] % Supervisors line
+%			{\sffamily\large \textbf{Supervisors:}}\\[0.5cm] % Supervisors line
+			{\sffamily\large Supervisors:}\\[0.5cm] % Supervisors line
 			{\large \thesupervisors}                         % Supervisors
 		\end{center}
 	\end{titlepage}	
@@ -432,7 +441,7 @@ Snowland, North Pole}
 	\label{paper:\Alph{chapter}}
 
 	% Add a thumbmark
-	\thumbmark{Paper \Alph{chapter}}{\hspace{1.25mm}\Large\sffamily\Alph{chapter}\hspace{1.25mm}}{white}{black}
+	\thumbmark{Paper \Alph{chapter}}{{\normalfont\hspace{1.25mm}\Large\sffamily\Alph{chapter}\hspace{1.25mm}}}{white}{black}
 
 	% Include paper info
 	\vspace*{3cm}
@@ -450,8 +459,8 @@ Snowland, North Pole}
 	% Create the paper title
 	\cleardoublepage
 	\thispagestyle{plain}
+	\paperhead*{\thepapertitle}
 	\begin{center}
-		{\sffamily \LARGE \thepapertitle}\\[0.8cm]
 		\thepaperauthor\\[1cm]
 	\end{center}
 
