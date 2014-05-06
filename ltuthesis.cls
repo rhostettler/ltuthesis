@@ -260,6 +260,7 @@ Snowland, North Pole}
 
 %% Acknowledgments
 \newenvironment{acknowledgments}{
+	\@mkboth{Acknowledgments}{Acknowledgments}
 	\chapter*{Acknowledgments} % add the acknowledgments title
 }{
 	\cleardoublepage           % empty pages
@@ -392,6 +393,13 @@ Snowland, North Pole}
 }
 
 %% Option keys for \includepaper
+% Create a new toggle that will indicate whether we have to include the
+% copyright and DOI
+\newtoggle{published}
+\togglefalse{published}
+\newtoggle{accepted}
+\togglefalse{accepted}
+
 % Paper title
 \newcommand{\papertitle}[1]{
 	\def\thepapertitle{#1}
@@ -411,9 +419,21 @@ Snowland, North Pole}
 	\def\thepapertype{#1}
 }
 \papertype{published in}
-\define@key{paper}{published}[true]{\papertype{originally published in}}
-\define@key{paper}{accepted}[true]{\papertype{accepted for publication in}}
-\define@key{paper}{submitted}[true]{\papertype{submitted to}}
+\define@key{paper}{published}[true]{
+	\papertype{originally published in}
+	\toggletrue{published}
+	\toggletrue{accepted}
+}
+\define@key{paper}{accepted}[true]{
+	\papertype{accepted for publication in}
+	\togglefalse{published}
+	\toggletrue{accepted}
+}
+\define@key{paper}{submitted}[true]{
+	\papertype{submitted to}
+	\togglefalse{published}
+	\togglefalse{accepted}
+}
 
 % Publisher
 \newcommand{\paperpublisher}[1]{
@@ -422,6 +442,13 @@ Snowland, North Pole}
 \paperpublisher{}
 \define@key{paper}{journal}[true]{\paperpublisher{#1}}
 \define@key{paper}{conference}[true]{\paperpublisher{#1}}
+
+% DOI
+\newcommand{\paperdoi}[1]{
+	\def\thepaperdoi{#1}
+}
+\paperdoi{}
+\define@key{paper}{doi}{\paperdoi{#1}}
 
 % Copyright
 \newcommand{\papercopyright}[1]{
@@ -453,8 +480,18 @@ Snowland, North Pole}
 	\textbf{Reformatted version of paper \thepapertype:}\\
 	\thepaperpublisher\\
 	%
-	\vspace*{0.6cm}\\
-	\copyright~\thepapercopyright, reprinted with permission.
+	% Include DOI (if published)
+	\iftoggle{published}{%
+		\vspace{0.6cm}\\
+		\textbf{Digital Object Identifier:}\\
+		\thepaperdoi\\
+	}{}%
+	%
+	% Include copyright (if accepted/published)
+	\iftoggle{accepted}{%
+		\vspace*{0.6cm}\\
+		\copyright~\thepapercopyright, reprinted with permission.
+	}{}
 	
 	% Create the paper title
 	\cleardoublepage
