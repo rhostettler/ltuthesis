@@ -13,37 +13,40 @@
 %% Class ID and LaTeX requirements
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Require LaTeX 2e
+% Require LaTeX 2e
 \NeedsTeXFormat{LaTeX2e}
 
-%% Class ID
+% Class ID
 \ProvidesClass{ltuthesis}[2014/04/08 Roland's Lic/PhD thesis class]
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Class Options
-%% =============
-%% 
-%% ltuthesis has a few of its own class options affecting the layout. These are:
-%%
-%%   * thumbmarks If set, thumbmarks (small black bars) are printed on the right
-%%                edge of the paper overview page. The feature is disabled by
-%%                default
-%%
-%% All other options are directly passed to the base class (book).
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% etoolbox %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Boolean flags, patchcmd for patching the list of references
+\RequirePackage{etoolbox}
 
-%% Thumbmarks
-\DeclareOption{thumbmarks}{%
-	\AtBeginDocument{%
-		\renewcommand{\thumbmark}[4]{\addthumb{#1}{#2}{#3}{#4}}
-	}
+% Flag that indicates whether to use thumbmarks or not
+\newtoggle{thumbmarks}
+\togglefalse{thumbmarks}
+
+
+% Class Options %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ltuthesis has a few of its own class options affecting the layout. These are:
+%
+%   * thumbmarks If set, thumbmarks (small black bars) are printed on the right
+%                edge of the paper overview page. The feature is disabled by
+%                default
+%
+% All other options are directly passed to the base class (book).
+
+% Thumbmarks
+\DeclareOption{thumbmarks}{
+	\toggletrue{thumbmarks}
 }
 
-%% Forward all the unknown options to our parent (book)
+% Forward all the unknown options to our parent (book)
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 
-%% Process all options
+% Process the options
 \ProcessOptions
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,18 +61,23 @@
 \RequirePackage{keyval}
 \RequirePackage{bibunits}
 
-\RequirePackage{etoolbox}     % Provides patchmd (among others)
 
-% Thumbmarks
-\RequirePackage[height=20mm,width=10mm,nophantomsection]{thumbs}
-\newcommand{\thumbmark}[4]{}
+%% Thumbmarks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iftoggle{thumbmarks}{
+	\RequirePackage[height=20mm,width=10mm,nophantomsection]{thumbs}
+	\newcommand{\thumbmark}[4]{\addthumb{#1}{#2}{#3}{#4}}
+}{
+	\newcommand{\thumbmark}[4]{}
+}
 
-% Fonts
+
+%% Fonts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\RequirePackage{avant}
 %\RequirePackage{tgheros}   % <- Closest to Helvetica neue (i suppose)
 \RequirePackage{tgadventor}
 \RequirePackage{tgpagella} % <- Closest "standard" LaTeX font to Bembo
 \RequirePackage[T1]{fontenc}
+\RequirePackage{textcomp}
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,88 +89,75 @@
 %\widowpenalty10000
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Title Formatting
-%% ================
-%%
-%% We use the 'titlesec' package for this. The advanced interface using
-%% '\titleformat' is:
-%% 
-%% \titleformat{command}[shape]{format}{label}{sep}{before}[after]
-%%   * command   Self-explanatory
-%%   * shape     Paragraph shape
-%%   * format    Format to be applied to the whole title including label and
-%%               text. This part can contain vertical material which is typeset
-%%               just after the space above the title
-%%   * label     Defines the label, leave empty for no label.
-%%   * sep       Horizontal separation between label and title body (a length,
-%%               must not be empty).
-%%   * before    Code preceding the title body.
-%%   * after     Code following the title body.
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Load titlesec
+% Title Formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We use the 'titlesec' package for this. The advanced interface using
+% '\titleformat' is:
+% 
+% \titleformat{command}[shape]{format}{label}{sep}{before}[after]
+%   * command   Self-explanatory
+%   * shape     Paragraph shape
+%   * format    Format to be applied to the whole title including label and
+%               text. This part can contain vertical material which is typeset
+%               just after the space above the title
+%   * label     Defines the label, leave empty for no label.
+%   * sep       Horizontal separation between label and title body (a length,
+%               must not be empty).
+%   * before    Code preceding the title body.
+%   * after     Code following the title body.
 \RequirePackage{titlesec}
 
-%% Part
+% Part
 \titleformat{\part}[display]{\sffamily\raggedleft \Huge}{\partname\ \thepart}{0pt}{}
 
-%% Regular chapter formatting
-%% => "Chapter X" is inside the "bars"
+% Regular chapter formatting
+% => "Chapter X" is inside the "bars"
 \titleformat{name=\chapter}[display]{\sffamily\raggedleft\hrule\vspace{5pt}\Huge}{\scshape \chaptertitlename\ \thechapter \hrule}{10pt}{}
 
-%% Starred chapter formatting
-%% => Chapter name is inside the "bars" (Abstract, Contents, References, etc.) 
+% Starred chapter formatting
+% => Chapter name is inside the "bars" (Abstract, Contents, References, etc.) 
 \titleformat{name=\chapter,numberless}[hang]{\sffamily\raggedleft\hrule\vspace{5pt}\Huge\scshape}{}{0pt}{}[\hrule]
 
-%% Reset chapter numbers when starting a new part
+% Reset chapter numbers when starting a new part
 \@addtoreset{chapter}{part}
 
-%% Section
+% Section
 \titleformat{\section}[hang]{\sffamily\Large}{\thesection\ }{0pt}{\Large}
 
-%% Subsection
+% Subsection
 \titleformat{\subsection}[hang]{\sffamily\large}{\thesubsection\ }{0pt}{\large}
 
-%% Subsubsection
+% Subsubsection
 \titleformat{\subsubsection}[hang]{\sffamily}{}{0pt}{\sffamily}
 
-%% Class for paper titles above abstract
+% Class for paper titles above abstract
 \titleclass{\paperhead}{top}[\chapter]
 \newcounter{paperhead}
 \titleformat{\paperhead}[hang]{\centering\sffamily\LARGE}{}{0pt}{}
 \titlespacing{\paperhead}{0pt}{0pt}{0.4cm}
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Table of Contents Formatting
-%% ============================
-%%
-%% Here, we format the table of contents (toc), using the titletoc package. In
-%% general, we don't want page numbers for 'Part I' and 'Part II'. Furthermore,
-%% adjustments to the toc formatting are made later on (in \papersetup) where we
-%% change the appearance of \chapter since it's used with a different purpose in
-%% the papers.
-%%
-%% The interface of \titlecontents is:
-%%
-%% \titlecontents{section}[left]{above}{before w/ label}{before w/o label}
-%% {filler and page}[after]
-%%   * section           The sectioning command (without leading backslash)
-%%   * left              Space to the left
-%%   * above             Space above
-%%   * before w/ label  
-%%   * before w/o label  
-%%   * filler and page   How to fill the space between the section name and
-%%                       number and page number formatting
-%%   * after             Additional content after the page number
-%%
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Load titletoc
+% Table of Contents Formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here, we format the table of contents (toc), using the titletoc package. In
+% general, we don't want page numbers for 'Part I' and 'Part II'. Furthermore,
+% adjustments to the toc formatting are made later on (in \papersetup) where we
+% change the appearance of \chapter since it's used with a different purpose in
+% the papers.
+%
+% The interface of \titlecontents is:
+%
+% \titlecontents{section}[left]{above}{before w/ label}{before w/o label}
+% {filler and page}[after]
+%   * section           The sectioning command (without leading backslash)
+%   * left              Space to the left
+%   * above             Space above
+%   * before w/ label  
+%   * before w/o label  
+%   * filler and page   How to fill the space between the section name and
+%                       number and page number formatting
+%   * after             Additional content after the page number
 \RequirePackage{titletoc}
 
-%% Print "Part #" instead of just "#"
+% Print "Part #" instead of just "#"
 \titlecontents{part}[0pt]{\addvspace{26pt}}{}{\large \bfseries \partname\ \thepart}{}[]
 
 
@@ -490,7 +485,7 @@ Snowland, North Pole}
 	% Include copyright (if accepted/published)
 	\iftoggle{accepted}{%
 		\vspace*{0.6cm}\\
-		\copyright~\thepapercopyright, reprinted with permission.
+		\textcopyright~\thepapercopyright, reprinted with permission.
 	}{}
 	
 	% Create the paper title
