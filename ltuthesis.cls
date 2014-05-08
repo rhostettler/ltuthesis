@@ -88,6 +88,14 @@
 %\clubpenalty10000
 %\widowpenalty10000
 
+% doi links TODO: DOCUMENT, MOVE TO CORRECT PLACE
+\AtBeginDocument{
+	\@ifpackageloaded{hyperref}{
+		% nop
+	}{
+		\newcommand{\href}[2]{#2}
+	}
+}
 
 % Title Formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % We use the 'titlesec' package for this. The advanced interface using
@@ -479,7 +487,7 @@ Snowland, North Pole}
 	\iftoggle{published}{%
 		\vspace{0.6cm}\\
 		\textbf{Digital Object Identifier:}\\
-		\thepaperdoi\\
+		\href{http://dx.doi.org/\thepaperdoi}{\thepaperdoi}\\
 	}{}%
 	%
 	% Include copyright (if accepted/published)
