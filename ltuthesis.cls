@@ -1,32 +1,25 @@
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LaTeX document class: ltuthesis.cls
 %% 
-%% Current version: 1.1
-%% Last modified by: Roland Hostettler, April 8, 2014
+%% Current version: 1.2
+%% Last modified by: Roland Hostettler, May 12, 2014
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Identification
-%% ==============
-%% 
-%% Class ID and LaTeX requirements
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Class ID & Requirements %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Require LaTeX 2e
 \NeedsTeXFormat{LaTeX2e}
 
 % Class ID
-\ProvidesClass{ltuthesis}[2014/04/08 Roland's Lic/PhD thesis class]
+\ProvidesClass{ltuthesis}[2014/05/12 Roland's Lic/PhD thesis class]
 
 
-% etoolbox %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Boolean flags, patchcmd for patching the list of references
+% Early Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages that are required early-on, for example for dealing with class 
+% options.
+
+% etoolbox: Boolean flags, patchcmd for patching the list of references
 \RequirePackage{etoolbox}
-
-% Flag that indicates whether to use thumbmarks or not
-\newtoggle{thumbmarks}
-\togglefalse{thumbmarks}
 
 
 % Class Options %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,31 +31,37 @@
 %
 % All other options are directly passed to the base class (book).
 
-% Thumbmarks
+% Thumbmarks (option)
+\newtoggle{thumbmarks}
+\togglefalse{thumbmarks}
 \DeclareOption{thumbmarks}{
 	\toggletrue{thumbmarks}
 }
 
-% Forward all the unknown options to our parent (book)
+% Forward all the other options to our parent (book)
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 
 % Process the options
 \ProcessOptions
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% General Classes and Packages
-%% ============================
-%% Note: More packages are loaded further down when they're needed
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parent class
 \LoadClass{book}
+
+
+% General Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% These classes and packages are required in general
+
+% Paper Format
 \RequirePackage[includehead,includefoot,top=20mm,left=20mm,right=20mm,bottom=20mm,a4paper]{geometry}
-\RequirePackage{fancyhdr}		% fancy headers
-\RequirePackage{amsmath}		% advanced mathematics
+
+% Key-Value Pairs
 \RequirePackage{keyval}
+
+% Bibliography Units
 \RequirePackage{bibunits}
 
 
-%% Thumbmarks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Thumbmarks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \iftoggle{thumbmarks}{
 	\RequirePackage[height=20mm,width=10mm,nophantomsection]{thumbs}
 	\newcommand{\thumbmark}[4]{\addthumb{#1}{#2}{#3}{#4}}
@@ -71,7 +70,7 @@
 }
 
 
-%% Fonts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fonts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\RequirePackage{avant}
 %\RequirePackage{tgheros}   % <- Closest to Helvetica neue (i suppose)
 \RequirePackage{tgadventor}
@@ -80,11 +79,9 @@
 \RequirePackage{textcomp}
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% General Formatting
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% General Formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Orphans and widow control
+% Orphans and widow control
 %\clubpenalty10000
 %\widowpenalty10000
 
@@ -143,6 +140,9 @@
 \titleformat{\paperhead}[hang]{\centering\sffamily\LARGE}{}{0pt}{}
 \titlespacing{\paperhead}{0pt}{0pt}{0.4cm}
 
+% Numberding dept down to subsection-level (3)
+\setcounter{secnumdepth}{3}
+
 
 % Table of Contents Formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Here, we format the table of contents (toc), using the titletoc package. In
@@ -169,28 +169,26 @@
 \titlecontents{part}[0pt]{\addvspace{26pt}}{}{\large \bfseries \partname\ \thepart}{}[]
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Page Formatting
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Page Formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Make fancy headings
+% Fancy headings
+\RequirePackage{fancyhdr}
 \setlength{\headheight}{15.2pt}
 \pagestyle{fancy}
-
-%% Regular headings
 \fancyhf{}
 \fancyhead[LE,RO]{\thepage}
 \fancyhead[RE]{\textsc{\nouppercase{\leftmark}}}
 \fancyhead[LO]{\textsc{\nouppercase{\rightmark}}}
 
-%% Make plain pages truly empty
+% Plain pages should be truly empty
 \fancypagestyle{plain}{
-	\fancyhf{}							% remove everything
-	\renewcommand{\headrulewidth}{0pt}	% remove lines as well
+	\fancyhf{}                          % remove header
+	\renewcommand{\headrulewidth}{0pt}	% remove header lines
 	\renewcommand{\footrulewidth}{0pt}
 }
 
-%% Redefine the \cleardoublepage command so that clear pages use the "empty" pagestyle
+% Redefine the \cleardoublepage command so that clear pages use the "empty"
+% pagestyle
 \renewcommand{\cleardoublepage}[0]{
 	\clearpage
 	\if@twoside
@@ -209,23 +207,21 @@
 }
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Front Matter (Title, Dedication, Abstract, ToC, and Acknowledgements)
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Front Matter / Preface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Title
+% Title
 \renewcommand{\title}[1]{
 	\def\thetitle{#1}
 }
 \title{On the Difficulty of Finding Two Identical Snowflakes}
 
-%% Author
+% Author
 \renewcommand{\author}[1]{
 	\def\theauthor{#1}
 }
 \author{John Doe}
 
-%% Address
+% Address
 \newcommand{\address}[1]{
 	\def\theaddress{#1}
 }
@@ -233,43 +229,43 @@
 	Division of Snowflake Re-Identification\\
 Snowland, North Pole}
 
-%% Date
+% Date
 \renewcommand{\date}[1]{
 	\def\thedate{#1}
 }
 \date{\today}
 
-%% Supervisors
+% Supervisors
 \newcommand{\supervisors}[1]{
 	\def\thesupervisors{#1}
 }
 \supervisors{Professor Snowman and Associate Professor Yeti}
 
-%% Dedication
+% Dedication environment
 \newenvironment{dedication}{
 	\thispagestyle{plain}
 	\vspace*{10cm}
 	\raggedleft \itshape
 }{
-	\cleardoublepage       % empty pages
+	\cleardoublepage
 }
 
-%% Abstract
+% Abstract environment
 \newenvironment{abstract}{
-	\chapter*{Abstract}    % add the abstract title
+	\chapter*{Abstract}
 }{
-	\cleardoublepage       % empty pages
+	\cleardoublepage
 }
 
-%% Acknowledgments
+% Acknowledgments environment
 \newenvironment{acknowledgments}{
 	\@mkboth{Acknowledgments}{Acknowledgments}
-	\chapter*{Acknowledgments} % add the acknowledgments title
+	\chapter*{Acknowledgments}
 }{
-	\cleardoublepage           % empty pages
+	\cleardoublepage
 }
 
-%% Titlepage
+% Titlepage
 \renewcommand{\maketitle}{
 	\pagenumbering{Roman}
 
@@ -278,14 +274,11 @@ Snowland, North Pole}
 		\thispagestyle{empty}
 		\begin{center}
 			\vspace*{1cm} \mbox{}\hrulefill \mbox{}\\[2.5cm] % Vertical line
-%			{\sffamily\Huge \textbf{\thetitle\\[2.5cm]}}     % Thesis title
-%			{\sffamily\LARGE \textbf{\theauthor}}\\[2.25cm]  % Author
-			{\sffamily\Huge \thetitle\\[2.5cm]}     % Thesis title
-			{\sffamily\LARGE \theauthor}\\[2.25cm]  % Author
+			{\sffamily\Huge \thetitle\\[2.5cm]}              % Thesis title
+			{\sffamily\LARGE \theauthor}\\[2.25cm]           % Author
 			{\large \theaddress}\\[5.5cm]                    % Address
 			{\large \mbox{}\hrulefill\mbox{}}\\[1cm]         % Horizontal line
-%			{\sffamily\large \textbf{Supervisors:}}\\[0.5cm] % Supervisors line
-			{\sffamily\large Supervisors:}\\[0.5cm] % Supervisors line
+			{\sffamily\large Supervisors:}\\[0.5cm]          % Supervisors line
 			{\large \thesupervisors}                         % Supervisors
 		\end{center}
 	\end{titlepage}	
@@ -297,7 +290,7 @@ Snowland, North Pole}
 	\newpage
 }
 
-%% Table of Contents
+% Table of Contents
 \let\oldtoc\tableofcontents
 \setcounter{tocdepth}{1}
 \renewcommand{\tableofcontents}[0]{
@@ -307,13 +300,9 @@ Snowland, North Pole}
 }
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Kappa
-%% =====
-%% 
-%% The 'intro'-environment. Starts a new part (Part I) and creates a global list 
-%% of references at the end of the part.
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Kappa Environment %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The 'intro'-environment. Starts a new part (Part I) and creates a global list 
+% of references at the end of the part.
 \newenvironment{intro}{
 	\pagenumbering{arabic}
 	\part{}
@@ -328,15 +317,17 @@ Snowland, North Pole}
 }
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Papers
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Command to switch to papers mode -> reformats a great deal of stuff
+% Papers Environment %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Provides a 'papers' environment that should enclose all the '\includepaper's 
+% (see below). It also starts a new part (Part II) and reformats title headings,
+% etc.
+
+% Command to switch to papers mode -> reformats a great deal of stuff
 \newcommand{\paperssetup}[0]{
-	%% Papers are added as 'Chapters' with the title 'Paper'
+	% Papers are added as 'Chapters' with the title 'Paper'
 	\renewcommand{\chaptername}{Paper}
 	
-	%% Reformat bibliography
+	% Reformat bibliography
 	% 1. Set title to 'References'
 	\renewcommand{\bibname}{References}
 	
@@ -357,7 +348,6 @@ Snowland, North Pole}
 %	}
 	
 	% Reformat ToC (Chapter entries only)
-	%\titlecontents{section}[left]{above}{before w/ label}{before w/o label}{filler and page}[after]
 	\titlecontents{chapter}[0pt]{\addvspace{12pt}}{\bfseries}{}{\bfseries\hfill\contentspage}
 
 	% Reformat headers
@@ -386,22 +376,18 @@ Snowland, North Pole}
 	}
 }
 
-%% The 'papers' environment, wrapping all of the above. Starts a new part 
-%% ('Part II') and redefines lots of commands to fit the formatting for the 
-%% papers
+% The 'papers' environment itself, wrapping all of the above. Starts a new part 
+% ('Part II') and calls '\papersetup'
 \newenvironment{papers}{
 	\part{}
 	\paperssetup
 }{
 }
 
-%% Option keys for \includepaper
-% Create a new toggle that will indicate whether we have to include the
-% copyright and DOI
-\newtoggle{published}
-\togglefalse{published}
-\newtoggle{accepted}
-\togglefalse{accepted}
+
+% \includepaper Command %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The command that is used for including papers. Creates a paper front page and
+% title / author.
 
 % Paper title
 \newcommand{\papertitle}[1]{
@@ -417,7 +403,13 @@ Snowland, North Pole}
 \paperauthor{}
 \define@key{paper}{author}{\paperauthor{#1}}
 
-% Paper type
+% Paper type (submitted / accepted / published)
+% Uses toggles to store the type of paper for including the copyright notice
+% and DOI
+\newtoggle{published}
+\togglefalse{published}
+\newtoggle{accepted}
+\togglefalse{accepted}
 \newcommand{\papertype}[1]{
 	\def\thepapertype{#1}
 }
@@ -438,20 +430,20 @@ Snowland, North Pole}
 	\togglefalse{accepted}
 }
 
-% Publisher
-\newcommand{\paperpublisher}[1]{
-	\def\thepaperpublisher{#1}
-}
-\paperpublisher{}
-\define@key{paper}{journal}[true]{\paperpublisher{#1}}
-\define@key{paper}{conference}[true]{\paperpublisher{#1}}
-
 % DOI
 \newcommand{\paperdoi}[1]{
 	\def\thepaperdoi{#1}
 }
 \paperdoi{}
 \define@key{paper}{doi}{\paperdoi{#1}}
+
+% Publisher (this is actually the journal/conference)
+\newcommand{\paperpublisher}[1]{
+	\def\thepaperpublisher{#1}
+}
+\paperpublisher{}
+\define@key{paper}{journal}[true]{\paperpublisher{#1}}
+\define@key{paper}{conference}[true]{\paperpublisher{#1}}
 
 % Copyright
 \newcommand{\papercopyright}[1]{
@@ -460,7 +452,8 @@ Snowland, North Pole}
 \papercopyright{}
 \define@key{paper}{copyright}{\papercopyright{#1}}
 
-%% Paper inclusion command
+
+% Paper inclusion command itself
 \newcommand{\includepaper}[2][]{
 	% Process the options
 	\setkeys{paper}{#1}
@@ -470,7 +463,7 @@ Snowland, North Pole}
 	\chapter[Paper \Alph{chapter}]{\thepapertitle}
 	\label{paper:\Alph{chapter}}
 
-	% Add a thumbmark
+	% Add a thumbmark (does nothing if thumbmarks are disabled)
 	\thumbmark{Paper \Alph{chapter}}{{\normalfont\hspace{1.25mm}\Large\sffamily\Alph{chapter}\hspace{1.25mm}}}{white}{black}
 
 	% Include paper info
@@ -504,7 +497,7 @@ Snowland, North Pole}
 		\thepaperauthor\\[1cm]
 	\end{center}
 
-	% Star a new bibliography unit
+	% Start a new bibliography unit
 	\begin{bibunit}
 
 	% Include the paper main file
@@ -518,7 +511,3 @@ Snowland, North Pole}
 	\clearpage
 }
 
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% EOF
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
