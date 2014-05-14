@@ -276,7 +276,8 @@ Snowland, North Pole}
 			\vspace*{1cm} \mbox{}\hrulefill \mbox{}\\[2.5cm] % Vertical line
 			{\sffamily\Huge \thetitle\\[2.5cm]}              % Thesis title
 			{\sffamily\LARGE \theauthor}\\[2.25cm]           % Author
-			{\large \theaddress}\\[5.5cm]                    % Address
+			{\large \theaddress}                             % Address
+			\vfill
 			{\large \mbox{}\hrulefill\mbox{}}\\[1cm]         % Horizontal line
 			{\sffamily\large Supervisors:}\\[0.5cm]          % Supervisors line
 			{\large \thesupervisors}                         % Supervisors
