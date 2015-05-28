@@ -295,6 +295,7 @@ Snowland, North Pole}
 \let\oldtoc\tableofcontents
 \setcounter{tocdepth}{1}
 \renewcommand{\tableofcontents}[0]{
+	\cleardoublepage
 	\pdfbookmark{\contentsname}{toc}
 	\oldtoc
 	\cleardoublepage       % advance to a new page
