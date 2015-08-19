@@ -467,6 +467,7 @@ Snowland, North Pole}
 
 	% Add a thumbmark (does nothing if thumbmarks are disabled)
 	\thumbmark{Paper \Alph{chapter}}{{\normalfont\hspace{1.25mm}\Large\sffamily\Alph{chapter}\hspace{1.25mm}}}{white}{black}
+%	\thumbmark{Paper \Alph{chapter}}{{\hfill\Large\sffamily\Alph{chapter}\hfill}}{white}{black}
 
 	% Include paper info
 	\vspace*{3cm}

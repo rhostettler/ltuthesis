@@ -1,3 +1,4 @@
+*.bbl
 *.tmb
 *.aux
 *.ini
@@ -5,3 +6,4 @@
 *.auxlock
 *.out
 *.toc
+*.blg

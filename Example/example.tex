@@ -1,111 +1,150 @@
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ltuthesis.cls Example
-%% =============================================================================
-%% This is an example LaTeX file that shows how the 'ltuthesis.cls' file is 
-%% used. Most of the code should be self-explanatory. There are a couple of
-%% known issues in the template, have a look at the top of the class file and/or
-%% the TODO.md file.
-%% 
-%% 2012-05-10 / Roland Hostettler <rolhos@ltu.se>
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ltuthesis.cls Example %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is an example and documentation to show and document the 'ltuthesis.cls'
+% LaTeX class. It can be used as a starting point for writing your own thesis.
+%
+% IMPORTANT NOTICE: The template and its features are thoroughly described in
+% the PDF produced by this example. Please refer to this documentation first.
+%
+% In order to build the example, run ...
+%
+% TODO 
+%   [ ] Include the commands required to compile this example. Also, include a
+%       makefile.
+%   [ ] I might want to include the option of creating the library-style front-
+%       page in order to publish it myself.
+%
+% 2014-06-04 -- Roland Hostettler <roland.hostettler@ltu.se>
+
+% Document Class Definition %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define the document class to use. Just as for the book class, we define a two-
+% sided layout where chapters start on right-handed pages. Furthermore, we use 
+% A4 paper and 12pt fonts. Of course other options can be used.
+%
+% Finally, the 'thumbmarks' option instructs the template to place thumbmarks on
+% for easy navigation (optional of course).
 %\documentclass[twoside,openright,12pt,a4paper]{ltuthesis}
 \documentclass[twoside,openright,12pt,a4paper,thumbmarks]{ltuthesis}
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Preamble - Include and Setup Packages
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Input encoding: Most modern OSes use UTF-8 and the template is written in
-%% UTF-8, however, others should work too
+
+% Load Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here, we load the packages required by the thesis. None of the packages is re-
+% quired by the template as the required packages are loaded by the class file 
+% itself. However, the packages loaded below give you a good starting point.
+
+% Input encoding
+% Most modern OSes use UTF-8 and the template is written in UTF-8, however, 
+% others should work too.
 \usepackage[utf8]{inputenc}
 
-%% Hyperref: Practical if you want a PDF with links and an index (but not
-%% required). Note that the library will unfortunately remove that when they
-%% add the cover pages
+% To fix block alignment
+\usepackage{microtype}
+
+% hyperref
+% Practical if you want a PDF with links and an index.
 \usepackage[plainpages=false,pdfpagelabels]{hyperref}
 \hypersetup{
-%    bookmarks=true,         		% show bookmarks bar?
-    unicode=false,          		% non-Latin characters bookmarks
-    pdftoolbar=true,        		% show Acrobat's toolbar?
-    pdfmenubar=true,        		% show Acrobat's menu?
-    pdffitwindow=false,     		% window fit to page when opened
-    pdfstartview={FitH},    		% fits the width of the page to the window
-    pdftitle={Vehicle Parameter Estimation using Road Surface Vibrations},					    % title
-    pdfauthor={Roland Hostettler},	% author
-    pdfsubject={},   				% subject of the document
-    pdfcreator={pdfTeX},			% creator of the document
-    pdfproducer={}, 				% producer of the document
-    pdfkeywords={},					% list of keywords
-    pdfnewwindow=true,  			% links in new window
-    colorlinks=true,				% false: boxed links; true: colored links
-    linkcolor=black,    			% color of internal links
-    citecolor=black,    			% color of links to bibliography
-    filecolor=black,    			% color of file links
-    urlcolor=black,      			% color of external links
+    % General appearance when opening the PDF
+    % bookmarks=true,% show bookmarks bar?
+    unicode=false,                                % Use non-Latin characters in bookmarks?
+    pdftoolbar=true,                              % Show Acrobat's toolbar?
+    pdfmenubar=true,                              % show Acrobat's menu?
+    pdffitwindow=false,                           % Window fit to page when opened
+    pdfstartview={FitH},                          % Fits the width of the page to the window
+    %    
+    % Meta information
+    pdftitle={Alternative LTU Ph.D. Thesis Template}, % PDF Title
+    pdfauthor={Roland Hostettler},                % Author
+    pdfsubject={},                                % Subject of the document
+    pdfcreator={pdfTeX},                          % Creator of the document
+    pdfproducer={},                               % Producer of the document
+    pdfkeywords={},                               % List of keywords
+    %
+    % Appearance and behavior of links
+    pdfnewwindow=true,                            % Links in new window
+    colorlinks=true,                              % False: boxed links; true: colored links
+    linkcolor=black,                              % Color of internal links
+    citecolor=black,                              % Color of links to bibliography
+    filecolor=black,                              % Color of file links
+    urlcolor=black,                               % Color of external links
 }
 
-%% If you have appendices in one (or more) of your articles, you need the
-%% following lines
-%% TODO: See how we can properly integrate this in the template
+
+% appendix
+% If you have appendices in your articles, you can use the 'appendix' package
+% to make them appear in the correct format. Include the following lines:
 \usepackage{appendix}
 \renewcommand{\setthesection}{\Alph{section}}
 \renewcommand*{\theHchapter}{\thepart.\thechapter}
 
+
+% lipsum
+% This package is to generate (realistic) arbitrary text, simply remove it.
 \usepackage{lipsum}
+\usepackage{listings}
+\lstset{language=[LaTeX]TeX}
+
+\usepackage{color}
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Start the document
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Document Start %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Setup the Bibliography
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% The bibliography is handled by bibunits which creates individual 
-%% bibliography units for the "Kappa"-part and one for each of the papers. The
-%% bibunits are created automatically and the bibliography for the kappa is 
-%% added automatically too. However, in the papers you have to issue a '\putbib'
-%% command at the place where you want the bibliography to appear.
-%%
-%% '\defaultbibliograph' and '\defaultbibliographystyle' define the default
-%% bibliography file and style used for the entire document if no other
-%% bibliography and/or style is specified within the respective bibunit.
-%%
-%% Finally, bibunits creates a set of bibliography files called 'buX.aux', one 
-%% for each bibunit. You have to run bibtex on each of them to genereate the
-%% corresponding bbl-file. On Linux I use the following script (which is
-%% involved as a post-processor after pdflatex in my editor:
-%%
-%%     # !/bin/bash
-%%    for file in bu*.aux; do
-%%        bibtex $file
-%%    done;
-%%
-%% Details about all this can be found in the bibunits manual.
-\defaultbibliography{dummy}
+% Bibliography Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The bibliography is handled by the 'bibunits' package which creates individual
+% bibliographies, one for the kappa and one for each of the papers. These are 
+% created automagically and the bibliography for the kappa is added 
+% automatically after the last chapter of the kappa. However, in the papers you
+% have to issue a '\putbib' command at the place where you want the bibliography
+% to appear, see the example papers included.
+%
+% '\defaultbibliograph' and '\defaultbibliographystyle' define the default
+% bibliography file and style used for the entire document if no other
+% bibliography and/or style is specified within the respective bibunit. The 
+% latter is advanced and the user is referred to the bibunits documentation.
+%
+% Finally, bibunits creates a set of bibliography files called 'buX.aux', one 
+% for each bibunit. You have to run bibtex on each of them to genereate the
+% corresponding bbl-file. On Linux I use the following script (which is
+% involved as a post-processor after pdflatex in my editor:
+%
+%     # !/bin/bash
+%    for file in bu*.aux; do
+%        bibtex $file
+%    done;
+%
+% Details about all this can be found in the bibunits manual.
+\defaultbibliography{example}
 \defaultbibliographystyle{IEEEtran}
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Front Matter
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% This part should be pretty self-explanatory...
-\title{Alternative CSEE Thesis Template}
+% Preface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The following commands setup the preface of the thesis which consists of:
+%
+%   1. Title page
+%   2. Dedication (optional)
+%   3. Abstract
+%   4. Table of Contents
+%   5. Acknowledgments
+
+% Title and affilation
+% This part should be pretty self-explanatory...
+\title{Alternative LTU Ph.D.\ Thesis Template}
 \author{Roland Hostettler}
 \address{Department of Computer Science, Electrical and Space Engineering\\
+	Division of Signals and Systems\\
 	Luleå University of Technology\\
 	Luleå, Sweden}
 \supervisors{Your Supervisor}
 \maketitle
 
-%% Dedication, optional
+% Dedication, optional
 \begin{dedication}
-	Your dedication
+    Your dedication
 \end{dedication}
 
 %% Abstract
 \begin{abstract}
-Your thesis abstract.
+    \input{Preface/abstract}
 \end{abstract}
 
 %% Table of Contents
@@ -113,66 +152,72 @@ Your thesis abstract.
 
 %% Acknowledgments, optional
 \begin{acknowledgments}
-Your thesis acknowledgments.
+    \input{Preface/acknowledgments}
 \end{acknowledgments}
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Kappa
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% The 'kappa' part of the thesis is put into the 'intro' environment. This
-%% environment makes sure that all the formatting, etc. is setup correctly.
-%% After that it's just a matter of including the different chapters.
+% Kappa %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The kappa of the theisis is put into the 'intro' environment as shown below.
+% This ensures that all the formatting, etc. is setup correctly and it's just a
+% matter of including the different chapters. 
 \begin{intro}
-\input{Kappa/introduction}
-\input{Kappa/usage}
+    \input{Kappa/introduction}
+    \input{Kappa/usage}
+    \input{Kappa/tipstricks}
 \end{intro}
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Papers
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Similarly to the 'intro'-environment, the 'papers'-environment sets up the
-%% whole paper part with all the necessary formatting, etc.
+% Papers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Similarly to the 'intro'-environment, the included papers are put into a 
+% 'papers'-environment. Again, this sets up all the formatting, counters, etc.
 \begin{papers}
 
-%% Papers are included using the '\includepaper'-command. It uses the key-value
-%% options format similar to many other LaTeX commands (e.g. \includegraphics).
-%% The keys are:
-%% 
-%%     * title        The paper title
-%%     * author       The paper author(s), use curly brackets for a comma-
-%%                    separated list of authors
-%%     * journal      The journal where the article was published
-%%     * conference   The conference where the article was published
-%%     * copyright    The copyright holder
-%%     * published    For a published paper
-%%     * accepted     For an accepted paper
-%%     * submitted    For a submitted paper
-%%
-%% The main argument to the \includepaper-command is then the paper's main
-%% file. This is supposed to be very slim, see Example/PaperA/main.tex or
-%% Example/PaperB/main.tex. All the titles, etc. are typeset automatically.
+% Papers themselves are included using the '\includepaper'-command. It uses the 
+% key-value options format as used in many other LaTeX commands (for example 
+% \includegraphics). Some of the keys are required while others complement each
+% other. Different examples are given below.
+%
+% The keys are:
+%   * title        The paper title
+%   * author       The paper author(s), use curly brackets for a comma-
+%                  separated list of authors
+%   * journal      The journal where the article was/is going to be published
+%                  (only if the paper is a journal paper)
+%   * conference   The conference where the article was/is going to be published
+%                  (only if the paper is a conference paper)
+%   * copyright    The copyright holder (only if the copyright has been trans-
+%                  ferred).
+%   * published    For a published paper.
+%   * accepted     For an accepted paper.
+%   * submitted    For a submitted paper.
+%   * doi          The digital object identifier (DOI), for published papers
+%                  papers only.
+%
+% The main argument to the \includepaper-command is then the paper's main
+% file. This is supposed to be very slim, see Example/Paper A/main.tex or
+% Example/Paper B/main.tex. All the titles, etc. are typeset automatically.
 
-%% Paper A: First Example Paper
-\includepaper[title=An Example Paper,
-	author={Author A and Author B},
-	journal=A Journal of Important Studies,
-	copyright={2012, The Institution of Important Studies},
-	published]{PaperA/main}
+% Example Paper A: Published conference paper
+\includepaper[title={The First Example Paper},
+    author={Author A and Author B},
+    conference={54th Conference on LaTeX Templates},
+    copyright={2012, The Institute of All Things LaTeX},
+    published,
+    doi={2012/ABC}]{PaperA/main}
 
-%% Paper B: Second Example Paper
-\includepaper[title=Another Example Paper,
+% Example Paper B: Accepted journal paper
+\includepaper[title={The Second Example Paper},
+	author={Author A, Author C, and Author B},
+	journal={The International Journal of LaTeX Templates},
+	copyright={2012, The Institute of All Things LaTeX},
+	accepted]{PaperB/main}
+
+% Example Paper C: Submitted conference paper
+\includepaper[title={The Third Example Paper},
 	author={Author A, Author B, and Author C},
-	conference={1st Conference on \LaTeX~Templates},
-	copyright={2012, International \LaTeX~Federation},
-	published]{PaperB/main}
+	conference={1st Symposium on LaTeX Templates},
+	submitted]{PaperC/main}
 
 \end{papers}
 \end{document}
-
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% EOF
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

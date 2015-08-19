@@ -1,0 +1,114 @@
+\chapter{Usage}
+\label{chap:usage}
+A composite thesis at LTU normally consists of three parts:
+%
+\begin{enumerate}
+    \item preface;
+    \item thesis introduction (``Kappa'');
+    \item research papers.
+\end{enumerate}
+%
+A description of how these three parts are integrated in the thesis template follows in their individual sections below. However, before we can get started, we need to define our thesis to be of the \texttt{ltuthesis} document class:
+%
+\begin{lstlisting}
+    \documentclass[twoside,openright,12pt,a4paper]{ltuthesis}
+\end{lstlisting}
+%
+This will load the template with a font size 12 points, A4 paper\footnote{Your thesis will be printed in the S5 format, not A4. However, the printing office guidelines state that ``{\color{red} add quote here}'', see~\cite{blabla}}, double-sided layout, and new chapters starting on a right page. There are no additional packages required for you to be able to use the template (you might, however, want to have a look into Chapter~\ref{chap:tips_tricks} for a couple of common packages that one might want to use).
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Preface}
+\label{sec:usage:preface}
+The preface of your thesis includes the following parts:
+%
+\begin{enumerate}
+    \item Title page;
+    \item dedication or quote (optional);
+    \item abstract;
+    \item table of contents;
+    \item acknowledgments (optional).
+\end{enumerate}
+%
+Note that by the term ``title page'' we refer to the title page inside the printed book, and not the cover page (which will be added by the university library).
+
+\paragraph{Title Page} The title page includes the general information about your thesis, such as thesis title, your name, organization, and supervisors. It is created by setting the corresponding values in the preamble of your document as follows:
+%
+\begin{lstlisting}
+\title{Your Thesis Title}
+\author{Your Name}
+\address{Your Affiliation}
+\supervisors{Your Supervisor(s)}
+\end{lstlisting}
+%
+This is followed by a simple call to \texttt{maketitle} in your document body
+%
+\begin{lstlisting}
+\maketitle
+\end{lstlisting}
+%
+which will put all the information in place.
+
+\paragraph{Dedication} Next, it is common to dedicate your thesis to someone or to include a quote or something similar. You simply do this by including it in the \texttt{dedication}-environment as follows:
+%
+\begin{lstlisting}
+\begin{dedication}
+    Your dedication here.
+\end{dedication}
+\end{lstlisting}
+%
+In general, a dedication is not necessary but customary.
+
+\paragraph{Abstract} Similar to the dedication, the thesis abstract is placed in an \texttt{abstract}-environment:
+%
+\begin{lstlisting}
+\begin{abstract}
+    Your abstract here.
+\end{abstract}
+\end{lstlisting}
+
+\paragraph{Table of Contents} Next up is the table of contents. As in other latex classes, you simply have to make a call to
+%
+\begin{lstlisting}
+\tableofcontents
+\end{lstlisting}
+%
+to include it in your thesis.
+
+\paragraph{Acknowledgments} Finally, you might want to acknowledge a couple of people that helped you during your Ph.D.\ studies and life in general. Similar to the previous cases (you might already suspect it), put your acknowledgments into an \texttt{acknowledgments}-environment:
+%
+\begin{lstlisting}
+\begin{acknowledgments}
+    Put your acknowledgments here.
+\end{acknowledgments}
+\end{lstlisting}
+
+This concludes the preface of your thesis and everything should be in place. You should now be able to compile the bare minimum of your thesis by using \texttt{pdflatex}:
+%
+\begin{verbatim}
+pdflatex thesis.tex
+\end{verbatim}
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Kappa}
+
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Papers}
+
+include
+
+labels
+
+paths
+
+bibliography
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bibliography}
+The bibliography of your thesis deserves some special attention and it is very important that you \textbf{read this section carefully}.
+
+
